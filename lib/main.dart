@@ -65,15 +65,9 @@ class _HomePageState extends State<HomePage> {
 
   void _tapped(int index) {
     setState(() {
-      // If the square is empty — make a move
       if (board[index] == '') {
-        if (ohTrun) {
-          board[index] = 'O'; // O's turn
-        } else {
-          board[index] = 'X'; // X's turn
-        }
-
-        ohTrun = !ohTrun; // switch turn
+        board[index] = ohTrun ? 'O' : 'X'; // Place O or X
+        ohTrun = !ohTrun; // Switch turn
         _checkWinner();
       }
     });
