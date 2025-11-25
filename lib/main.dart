@@ -25,6 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // 9 squares
+  bool ohTrun = true; // the first player is  u;
   List<String> board = ['', '', '', '', '', '', '', '', ''];
 
   @override
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child: Text(
                   board[index],
+                  // index.toString(),
                   style: const TextStyle(
                     fontSize: 40,
                     color: Colors.white,
@@ -63,9 +65,66 @@ class _HomePageState extends State<HomePage> {
 
   void _tapped(int index) {
     setState(() {
+      // If the square is empty — make a move
       if (board[index] == '') {
-        board[index] = 'o';
+        if (ohTrun) {
+          board[index] = 'O'; // O's turn
+        } else {
+          board[index] = 'X'; // X's turn
+        }
+
+        ohTrun = !ohTrun; // switch turn
+        _checkWinner();
       }
     });
+  }
+
+  void _checkWinner() {
+    if (board[0] == board[1] && board[0] == board[2] && board[0] != '') {
+      _showWinDialog(board[0]);
+    }
+    if (board[3] == board[4] && board[3] == board[5] && board[3] != '') {
+      _showWinDialog(board[3]);
+    }
+    if (board[6] == board[7] && board[6] == board[8] && board[6] != '') {
+      _showWinDialog(board[6]);
+    }
+    if (board[0] == board[3] && board[0] == board[6] && board[0] != '') {
+      _showWinDialog(board[0]);
+    }
+    if (board[1] == board[4] && board[1] == board[7] && board[1] != '') {
+      _showWinDialog(board[1]);
+    }
+    if (board[2] == board[5] && board[2] == board[8] && board[2] != '') {
+      _showWinDialog(board[2]);
+    }
+    if (board[0] == board[4] && board[0] == board[8] && board[0] != '') {
+      _showWinDialog(board[0]);
+    }
+    if (board[2] == board[4] && board[2] == board[6] && board[2] != '') {
+      _showWinDialog(board[2]);
+    }
+
+    // Check rows, columns, and diagonals for a winner
+  }
+
+  void _showWinDialog(String winner) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Winner!'),
+          content: Text('$winner has won the game.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
